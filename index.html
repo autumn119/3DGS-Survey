@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Gaussian Splatting: A Comprehensive Taxonomy and Benchmark Survey</title>
+<meta name="description" content="Project page for the 3DGS survey paper — taxonomy, benchmark, and resources for 3D Gaussian Splatting research.">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #555;
+    --accent: #2563eb;
+    --accent-light: #dbeafe;
+    --border: #e5e7eb;
+    --card-bg: #f8fafc;
+    --code-bg: #1e293b;
+    --code-text: #e2e8f0;
+    --tag-bg: #f0fdf4;
+    --tag-text: #166534;
+    --tag-border: #bbf7d0;
+    --max-width: 960px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Hero */
+  .hero {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 80px 24px 48px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+  .hero .venue {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .hero .authors {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+  .hero .affiliations {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 32px;
+  }
+
+  /* Link buttons */
+  .link-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--bg);
+    transition: all 0.15s;
+  }
+  .link-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(37,99,235,0.1);
+  }
+  .link-btn.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .link-btn.primary:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+  }
+
+  /* Section */
+  section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px 64px;
+  }
+  section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent-light);
+  }
+  section h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 28px 0 12px;
+  }
+
+  /* Teaser */
+  .teaser-container {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .teaser-container img {
+    width: 100%;
+    display: block;
+  }
+  .teaser-container .caption {
+    padding: 12px 20px;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Abstract */
+  .abstract-box {
+    background: var(--card-bg);
+    border-left: 4px solid var(--accent);
+    padding: 20px 24px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.98rem;
+    line-height: 1.75;
+  }
+
+  /* Contributions */
+  .contrib-list {
+    list-style: none;
+    display: grid;
+    gap: 14px;
+  }
+  .contrib-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: box-shadow 0.15s;
+  }
+  .contrib-list li:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .contrib-list .icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .icon-taxonomy { background: #ede9fe; }
+  .icon-benchmark { background: #fce7f3; }
+  .icon-data { background: #dbeafe; }
+  .icon-code { background: #d1fae5; }
+  .contrib-list strong { display: block; margin-bottom: 2px; }
+
+  /* Taxonomy viz */
+  .taxonomy-tree {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: center;
+  }
+  .taxonomy-tree svg { max-width: 100%; height: auto; }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  thead th {
+    background: var(--card-bg);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  tbody tr:hover { background: #f8fafc; }
+  .best { color: #dc2626; font-weight: 700; }
+  .second { color: #2563eb; font-weight: 600; }
+  .ours { background: #fffbeb; }
+  .tag {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    border: 1px solid var(--tag-border);
+  }
+
+  /* Gallery */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .gallery-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--card-bg);
+  }
+  .gallery-card .img-placeholder {
+    aspect-ratio: 16/10;
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+  .gallery-card .info {
+    padding: 12px 16px;
+    font-size: 0.88rem;
+  }
+  .gallery-card .info .label {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .gallery-card .info .metric {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+  }
+
+  /* Citation */
+  .cite-block {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 20px 24px;
+    border-radius: 10px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+  .cite-block .kw { color: #f472b6; }
+  .cite-block .str { color: #a5d6ff; }
+  .cite-block .comment { color: #6b7280; }
+
+  /* Footer */
+  footer {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 32px 24px 48px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 1.5rem; }
+    .hero { padding: 48px 16px 32px; }
+    section { padding: 0 16px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== HERO ====== -->
+<div class="hero">
+  <div class="venue">Submitted to IEEE TVCG / TVC</div>
+  <h1>3D Gaussian Splatting:<br>A Comprehensive Taxonomy and Benchmark Survey</h1>
+  <p class="authors">[Author 1], [Author 2], [Author 3], [Author 4]</p>
+  <p class="affiliations">[Your University / Institution]</p>
+  <div class="link-bar">
+    <a class="link-btn primary" href="[arXiv URL TBD]" target="_blank">&#128196; Paper (arXiv)</a>
+    <a class="link-btn" href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark" target="_blank">&#128451; Benchmark Repo</a>
+    <a class="link-btn" href="https://doi.org/10.5281/zenodo.20263999" target="_blank">&#128206; Zenodo DOI</a>
+    <a class="link-btn" href="#citation">&#128279; BibTeX</a>
+  </div>
+</div>
+
+<!-- ====== TEASER ====== -->
+<section id="teaser">
+  <h2>Overview</h2>
+  <div class="teaser-container">
+    <img src="assets/teaser.png" alt="Teaser figure" onerror="this.parentElement.style.display='none'">
+    <div class="caption">
+      <strong>Figure 1:</strong> We present a comprehensive taxonomy of 3D Gaussian Splatting methods across three axes
+      &mdash; <em>Task Domain</em> (reconstruction, editing, generation, etc.),
+      <em>Module Focus</em> (representation, optimization, rendering), and
+      <em>Technical Approach</em> (anchoring, compression, anti-aliasing, etc.).
+      We also establish a unified benchmark protocol across 4 datasets and 6 metrics.
+    </div>
+  </div>
+  <div class="teaser-container" id="teaser-fallback" style="display:none;">
+    <div style="padding: 80px 40px; text-align:center; color:#94a3b8; font-size:1rem; line-height:1.8;">
+      &#128444;<br>
+      <strong>Teaser Figure</strong><br>
+      <em>Replace <code>assets/teaser.png</code> with your paper's teaser image</em><br>
+      <span style="font-size:0.85rem;">Recommended: 1920&times;1080 or 2:1 ratio, optimized PNG</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== ABSTRACT ====== -->
+<section id="abstract">
+  <h2>Abstract</h2>
+  <div class="abstract-box">
+    3D Gaussian Splatting (3DGS) has emerged as a transformative paradigm in novel view synthesis
+    and 3D scene representation, achieving real-time rendering speeds while matching or exceeding
+    the quality of neural radiance fields (NeRF). The rapid proliferation of 3DGS variants
+    &mdash; spanning dynamic scenes, 4D reconstruction, surface reconstruction, editing,
+    generation, and compression &mdash; has created an urgent need for a structured taxonomy
+    and unified evaluation. In this paper, we present a comprehensive survey that
+    <strong>(1)</strong> proposes a three-axis taxonomy (Task Domain &times; Module Focus &times; Technical Approach)
+    to categorize over 100 3DGS methods,
+    <strong>(2)</strong> establishes a reproducible benchmark protocol across 4 datasets (Blender, Mip-NeRF 360,
+    Tanks & Temples, and a custom Drum Tower cultural heritage dataset) with 6 standardized
+    metrics (PSNR, SSIM, LPIPS, FPS, VRAM, Training Time), and
+    <strong>(3)</strong> releases all code, configuration files, and results as an open-source repository
+    with a permanent Zenodo DOI for long-term archival.
+    Our benchmark reveals key trade-offs between quality, speed, and memory,
+    identifies under-explored areas such as large-scale outdoor scenes,
+    and provides actionable guidelines for future 3DGS research.
+  </div>
+</section>
+
+<!-- ====== CONTRIBUTIONS ====== -->
+<section id="contributions">
+  <h2>Key Contributions</h2>
+  <ul class="contrib-list">
+    <li>
+      <div class="icon icon-taxonomy">&#128202;</div>
+      <div>
+        <strong>Three-Axis Taxonomy</strong>
+        A structured classification of 100+ 3DGS methods along
+        Task Domain, Module Focus, and Technical Approach,
+        enabling systematic comparison and identifying research gaps.
+      </div>
+    </li>
+    <li>
+      <div class="icon icon-benchmark">&#128200;</div>
+      <div>
+        <strong>Unified Benchmark Protocol</strong>
+        Reproducible evaluation across 4 datasets &times; 6 metrics,
+        with standardized hardware (NVIDIA RTX 4090), software versions,
+        and 5-run averaging for statistical reliability.
+      </div>
+    </li>
+    <li>
+      <div class="icon icon-data">&#127963;</div>
+      <div>
+        <strong>Cultural Heritage Dataset</strong>
+        A new Drum Tower dataset featuring Chinese Dong minority architecture
+        captured under challenging geometry and lighting conditions,
+        serving as a real-world testbed beyond synthetic benchmarks.
+      </div>
+    </li>
+    <li>
+      <div class="icon icon-code">&#128187;</div>
+      <div>
+        <strong>Open-Source Release</strong>
+        All taxonomy tables (CSV), benchmark configurations, evaluation scripts,
+        and results are publicly available with a permanent Zenodo DOI
+        (<code>10.5281/zenodo.20263999</code>) for long-term reproducibility.
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- ====== TAXONOMY ====== -->
+<section id="taxonomy">
+  <h2>Taxonomy</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 16px;">
+    We classify 100+ 3DGS methods along three orthogonal axes:
+    <strong>Task Domain</strong> (what problem), <strong>Module Focus</strong> (which pipeline stage),
+    and <strong>Technical Approach</strong> (how it works).
+  </p>
+  <div class="taxonomy-tree">
+    <svg viewBox="0 0 920 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gTask" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
+        <linearGradient id="gModule" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#db2777"/><stop offset="100%" stop-color="#f472b6"/></linearGradient>
+        <linearGradient id="gTech" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#60a5fa"/></linearGradient>
+        <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12"/></filter>
+      </defs>
+      <!-- Title -->
+      <text x="460" y="36" text-anchor="middle" font-size="18" font-weight="700" fill="#1a1a2e">3DGS Taxonomy: Three Orthogonal Axes</text>
+      <!-- Axis 1: Task Domain -->
+      <rect x="20" y="60" width="880" height="140" rx="12" fill="url(#gTask)" opacity="0.08"/>
+      <rect x="20" y="60" width="880" height="140" rx="12" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+      <rect x="20" y="60" width="140" height="36" rx="8" fill="#7c3aed"/>
+      <text x="90" y="84" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Axis 1 — Task</text>
+      <text x="180" y="84" font-size="12" fill="#5b21b6" font-weight="500">Reconstruction</text>
+      <text x="300" y="84" font-size="12" fill="#5b21b6" font-weight="500">Dynamic / 4D</text>
+      <text x="410" y="84" font-size="12" fill="#5b21b6" font-weight="500">Editing</text>
+      <text x="490" y="84" font-size="12" fill="#5b21b6" font-weight="500">Generation</text>
+      <text x="590" y="84" font-size="12" fill="#5b21b6" font-weight="500">Compression</text>
+      <text x="710" y="84" font-size="12" fill="#5b21b6" font-weight="500">SLAM</text>
+      <text x="785" y="84" font-size="12" fill="#5b21b6" font-weight="500">Segmentation</text>
+      <!-- method chips row 1 -->
+      <rect x="180" y="100" width="96" height="22" rx="5" fill="#ede9fe"/>
+      <text x="228" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">3DGS, 2DGS</text>
+      <rect x="300" y="100" width="96" height="22" rx="5" fill="#ede9fe"/>
+      <text x="348" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">Deform 3DGS</text>
+      <rect x="410" y="100" width="65" height="22" rx="5" fill="#ede9fe"/>
+      <text x="443" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">GSEdit</text>
+      <rect x="590" y="100" width="96" height="22" rx="5" fill="#ede9fe"/>
+      <text x="638" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">Compact3D</text>
+      <rect x="710" y="100" width="60" height="22" rx="5" fill="#ede9fe"/>
+      <text x="740" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">GS-SLAM</text>
+      <!-- method chips row 2 -->
+      <rect x="180" y="130" width="96" height="22" rx="5" fill="#ede9fe"/>
+      <text x="228" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">Scaffold-GS</text>
+      <rect x="300" y="130" width="96" height="22" rx="5" fill="#ede9fe"/>
+      <text x="348" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">4DGS, STGS</text>
+      <rect x="410" y="130" width="65" height="22" rx="5" fill="#ede9fe"/>
+      <text x="443" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">GaussianPro</text>
+      <rect x="490" y="130" width="80" height="22" rx="5" fill="#ede9fe"/>
+      <text x="530" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">LGM, DreamG</text>
+      <rect x="590" y="130" width="96" height="22" rx="5" fill="#ede9fe"/>
+      <text x="638" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">LightGaussian</text>
+      <rect x="710" y="130" width="60" height="22" rx="5" fill="#ede9fe"/>
+      <text x="740" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">SplaTAM</text>
+      <rect x="785" y="130" width="90" height="22" rx="5" fill="#ede9fe"/>
+      <text x="830" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">LangSplat</text>
+      <!-- method chips row 3 -->
+      <rect x="180" y="160" width="96" height="22" rx="5" fill="#ede9fe"/>
+      <text x="228" y="175" text-anchor="middle" font-size="10" fill="#5b21b6">Mip-Splatting</text>
+
+      <!-- Axis 2: Module Focus -->
+      <rect x="20" y="220" width="880" height="120" rx="12" fill="url(#gModule)" opacity="0.08"/>
+      <rect x="20" y="220" width="880" height="120" rx="12" fill="none" stroke="#db2777" stroke-width="1.5"/>
+      <rect x="20" y="220" width="140" height="36" rx="8" fill="#db2777"/>
+      <text x="90" y="244" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Axis 2 — Module</text>
+      <text x="180" y="244" font-size="12" fill="#9d174d" font-weight="500">Representation</text>
+      <text x="310" y="244" font-size="12" fill="#9d174d" font-weight="500">Optimization</text>
+      <text x="430" y="244" font-size="12" fill="#9d174d" font-weight="500">Rendering</text>
+      <text x="530" y="244" font-size="12" fill="#9d174d" font-weight="500">Initialization</text>
+      <text x="645" y="244" font-size="12" fill="#9d174d" font-weight="500">Densification</text>
+      <text x="760" y="244" font-size="12" fill="#9d174d" font-weight="500">Training</text>
+      <!-- chips -->
+      <rect x="180" y="260" width="110" height="22" rx="5" fill="#fce7f3"/>
+      <text x="235" y="275" text-anchor="middle" font-size="10" fill="#9d174d">2D surfel, triplane</text>
+      <rect x="310" y="260" width="100" height="22" rx="5" fill="#fce7f3"/>
+      <text x="360" y="275" text-anchor="middle" font-size="10" fill="#9d174d">AbsGS, PixelGS</text>
+      <rect x="430" y="260" width="80" height="22" rx="5" fill="#fce7f3"/>
+      <text x="470" y="275" text-anchor="middle" font-size="10" fill="#9d174d">Mip-Splatting</text>
+      <rect x="530" y="260" width="95" height="22" rx="5" fill="#fce7f3"/>
+      <text x="578" y="275" text-anchor="middle" font-size="10" fill="#9d174d">GaussianPro</text>
+      <rect x="645" y="260" width="95" height="22" rx="5" fill="#fce7f3"/>
+      <text x="693" y="275" text-anchor="middle" font-size="10" fill="#9d174d">PixelGS, Revising</text>
+      <rect x="760" y="260" width="115" height="22" rx="5" fill="#fce7f3"/>
+      <text x="818" y="275" text-anchor="middle" font-size="10" fill="#9d174d">FreGS, Taming3DGS</text>
+      <!-- row 2 -->
+      <rect x="180" y="292" width="110" height="22" rx="5" fill="#fce7f3"/>
+      <text x="235" y="307" text-anchor="middle" font-size="10" fill="#9d174d">Octree, hash-grid</text>
+      <rect x="310" y="292" width="100" height="22" rx="5" fill="#fce7f3"/>
+      <text x="360" y="307" text-anchor="middle" font-size="10" fill="#9d174d">EfficientGS</text>
+      <rect x="430" y="292" width="80" height="22" rx="5" fill="#fce7f3"/>
+      <text x="470" y="307" text-anchor="middle" font-size="10" fill="#9d174d">TRBF, StopThePop</text>
+      <rect x="760" y="292" width="115" height="22" rx="5" fill="#fce7f3"/>
+      <text x="818" y="307" text-anchor="middle" font-size="10" fill="#9d174d">GaussianShader</text>
+
+      <!-- Axis 3: Technical Approach -->
+      <rect x="20" y="360" width="880" height="120" rx="12" fill="url(#gTech)" opacity="0.08"/>
+      <rect x="20" y="360" width="880" height="120" rx="12" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+      <rect x="20" y="360" width="140" height="36" rx="8" fill="#2563eb"/>
+      <text x="90" y="384" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Axis 3 — Technique</text>
+      <text x="180" y="384" font-size="12" fill="#1e40af" font-weight="500">Anchoring</text>
+      <text x="280" y="384" font-size="12" fill="#1e40af" font-weight="500">Compression</text>
+      <text x="390" y="384" font-size="12" fill="#1e40af" font-weight="500">Anti-Aliasing</text>
+      <text x="505" y="384" font-size="12" fill="#1e40af" font-weight="500">Regularization</text>
+      <text x="625" y="384" font-size="12" fill="#1e40af" font-weight="500">Level-of-Detail</text>
+      <text x="750" y="384" font-size="12" fill="#1e40af" font-weight="500">Feature Augmentation</text>
+      <!-- chips -->
+      <rect x="180" y="400" width="80" height="22" rx="5" fill="#dbeafe"/>
+      <text x="220" y="415" text-anchor="middle" font-size="10" fill="#1e40af">Scaffold-GS</text>
+      <rect x="280" y="400" width="90" height="22" rx="5" fill="#dbeafe"/>
+      <text x="325" y="415" text-anchor="middle" font-size="10" fill="#1e40af">LightGaussian</text>
+      <rect x="390" y="400" width="95" height="22" rx="5" fill="#dbeafe"/>
+      <text x="438" y="415" text-anchor="middle" font-size="10" fill="#1e40af">Mip-Splatting</text>
+      <rect x="505" y="400" width="100" height="22" rx="5" fill="#dbeafe"/>
+      <text x="555" y="415" text-anchor="middle" font-size="10" fill="#1e40af">PhysGaussian</text>
+      <rect x="625" y="400" width="105" height="22" rx="5" fill="#dbeafe"/>
+      <text x="678" y="415" text-anchor="middle" font-size="10" fill="#1e40af">CityGaussian</text>
+      <rect x="750" y="400" width="125" height="22" rx="5" fill="#dbeafe"/>
+      <text x="813" y="415" text-anchor="middle" font-size="10" fill="#1e40af">GaussianShader</text>
+      <!-- row 2 -->
+      <rect x="180" y="432" width="80" height="22" rx="5" fill="#dbeafe"/>
+      <text x="220" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Octree-GS</text>
+      <rect x="280" y="432" width="90" height="22" rx="5" fill="#dbeafe"/>
+      <text x="325" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Compact3D</text>
+      <rect x="390" y="432" width="95" height="22" rx="5" fill="#dbeafe"/>
+      <text x="438" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Analytic-Splatting</text>
+      <rect x="505" y="432" width="100" height="22" rx="5" fill="#dbeafe"/>
+      <text x="555" y="447" text-anchor="middle" font-size="10" fill="#1e40af">AbsGS, PixelGS</text>
+      <rect x="625" y="432" width="105" height="22" rx="5" fill="#dbeafe"/>
+      <text x="678" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Hierarchical-GS</text>
+      <rect x="750" y="432" width="125" height="22" rx="5" fill="#dbeafe"/>
+      <text x="813" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Feature3DGS</text>
+
+      <!-- Legend -->
+      <text x="460" y="520" text-anchor="middle" font-size="11" fill="#888">47 representative methods shown&emsp;|&emsp;Full table: <tspan fill="#2563eb">taxonomy/3dgs_taxonomy.csv</tspan></text>
+      <text x="460" y="545" text-anchor="middle" font-size="11" fill="#888">Companion repository: <tspan fill="#2563eb">github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark</tspan></text>
+      <!-- connecting lines from title -->
+      <line x1="460" y1="44" x2="460" y2="54" stroke="#cbd5e1" stroke-width="1"/>
+      <line x1="90" y1="54" x2="830" y2="54" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="90" y1="54" x2="90" y2="60" stroke="#7c3aed" stroke-width="1.5"/>
+      <line x1="460" y1="54" x2="460" y2="220" stroke="#db2777" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="90" y1="200" x2="90" y2="220" stroke="#db2777" stroke-width="1.5"/>
+      <line x1="90" y1="340" x2="90" y2="360" stroke="#2563eb" stroke-width="1.5"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ====== BENCHMARK ====== -->
+<section id="benchmark">
+  <h2>Benchmark Results</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 16px;">
+    Selected results on <strong>Mip-NeRF 360</strong> (outdoor scenes). Full results across all 4 datasets
+    are available in the <a href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark">benchmark repository</a>.
+    <span class="tag">Best</span> and <span class="tag">2nd</span> values highlighted.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Bicycle</th>
+          <th>Garden</th>
+          <th>Stump</th>
+          <th>Bonsai</th>
+          <th>Counter</th>
+          <th>Kitchen</th>
+          <th>Room</th>
+          <th>Avg PSNR&uarr;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>3DGS</strong> (Kerbl 2023)</td>
+          <td>25.25</td><td>27.41</td><td>26.55</td><td>31.98</td>
+          <td>28.70</td><td>30.32</td><td>30.63</td>
+          <td>28.69</td>
+        </tr>
+        <tr>
+          <td><strong>2DGS</strong> (Huang 2024)</td>
+          <td>24.77</td><td>26.69</td><td>26.08</td><td>31.45</td>
+          <td>28.21</td><td>30.02</td><td>30.28</td>
+          <td>28.21</td>
+        </tr>
+        <tr>
+          <td><strong>Mip-Splatting</strong> (Yu 2024)</td>
+          <td class="best">25.79</td><td class="best">27.85</td><td class="best">26.92</td>
+          <td class="best">32.48</td><td>28.80</td><td class="best">31.15</td><td class="best">31.21</td>
+          <td class="best">29.17</td>
+        </tr>
+        <tr>
+          <td><strong>Scaffold-GS</strong> (Lu 2024)</td>
+          <td class="second">25.55</td><td class="second">27.73</td><td class="second">26.74</td>
+          <td class="second">32.31</td><td class="best">29.08</td><td class="second">30.87</td><td class="second">31.09</td>
+          <td class="second">29.05</td>
+        </tr>
+        <tr class="ours">
+          <td><strong>3DGS</strong> (Ours, RTX 4090)</td>
+          <td colspan="7" style="text-align:center; color:#888; font-style:italic;">
+            Drum Tower &mdash; Zeli: 31.94 dB &ensp;|&ensp; Chao Li: 33.53 dB &ensp;
+            <a href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark" style="font-style:normal;">[see full results]</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.8rem; color:#888; margin-top:8px;">
+    * Data sourced from original papers. Our own experiments run on a single NVIDIA RTX 4090 (24 GB).
+  </p>
+</section>
+
+<!-- ====== DRUM TOWER ====== -->
+<section id="dataset">
+  <h2>Drum Tower Dataset</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 16px;">
+    A new real-world benchmark featuring Chinese Dong minority drum tower architecture &mdash;
+    challenging geometry with intricate wooden structures, variable outdoor lighting,
+    and multi-scale details.
+  </p>
+  <div class="gallery">
+    <div class="gallery-card">
+      <div class="img-placeholder">
+        &#127963; Zeli Drum Tower<br><small>Place render here</small>
+      </div>
+      <div class="info">
+        <div class="label">Zeli Drum Tower</div>
+        <div class="metric">134 train / 15 val / 56 test &ensp;|&ensp; 400&times;400 &ensp;|&ensp; 3DGS: 31.94 dB</div>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="img-placeholder">
+        &#127963; Chao Li Drum Tower<br><small>Place render here</small>
+      </div>
+      <div class="info">
+        <div class="label">Chao Li Drum Tower</div>
+        <div class="metric">134 train / 15 val / 56 test &ensp;|&ensp; 400&times;400 &ensp;|&ensp; 3DGS: 33.53 dB</div>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <div class="img-placeholder">
+        &#127910; Comparison View<br><small>Place comparison here</small>
+      </div>
+      <div class="info">
+        <div class="label">Ground Truth vs. Rendered</div>
+        <div class="metric">Side-by-side quality comparison across methods</div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size:0.8rem; color:#888; margin-top:12px;">
+    * Dataset will be released upon paper acceptance. For access requests, please contact the corresponding author.
+  </p>
+</section>
+
+<!-- ====== RESOURCES ====== -->
+<section id="resources">
+  <h2>Resources &amp; Links</h2>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
+    <a href="[arXiv URL TBD]" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
+      <strong>&#128196; Paper (arXiv)</strong><br>
+      <span style="color:var(--text-secondary); font-size:0.88rem;">Full paper PDF on arXiv</span>
+    </a>
+    <a href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
+      <strong>&#128451; Benchmark Repository</strong><br>
+      <span style="color:var(--text-secondary); font-size:0.88rem;">Code, taxonomy CSV, benchmark config</span>
+    </a>
+    <a href="https://doi.org/10.5281/zenodo.20263999" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
+      <strong>&#128206; Zenodo Archive</strong><br>
+      <span style="color:var(--text-secondary); font-size:0.88rem;">Permanent DOI: 10.5281/zenodo.20263999</span>
+    </a>
+    <a href="https://github.com/autumn119/3DGS-Survey" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
+      <strong>&#127760; Project Page</strong><br>
+      <span style="color:var(--text-secondary); font-size:0.88rem;">This page (GitHub Pages)</span>
+    </a>
+  </div>
+</section>
+
+<!-- ====== CITATION ====== -->
+<section id="citation">
+  <h2>Citation</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 12px;">
+    If you find this work useful, please cite:
+  </p>
+  <div class="cite-block"><span class="comment">@article{</span><span class="kw">3dgs-survey-2026</span>,
+  <span class="kw">title</span>   = <span class="str">{3D Gaussian Splatting: A Comprehensive Taxonomy and Benchmark Survey}</span>,
+  <span class="kw">author</span>  = <span class="str">{Author1 and Author2 and Author3 and Author4}</span>,
+  <span class="kw">journal</span> = <span class="str">{[Journal/Conference Name]}</span>,
+  <span class="kw">year</span>    = <span class="str">{2026}</span>,
+  <span class="kw">doi</span>     = <span class="str">{10.5281/zenodo.20263999}</span>,
+<span class="comment">}</span></div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <p>&copy; 2026. This project page is maintained alongside the
+  <a href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark">benchmark repository</a>.</p>
+  <p style="margin-top:8px;">Built with &#10084; for the 3D vision community.</p>
+</footer>
+
+<script>
+  // Show fallback if teaser image not found
+  var img = document.querySelector('.teaser-container img');
+  if (img && img.naturalWidth === 0) {
+    img.parentElement.style.display = 'none';
+    document.getElementById('teaser-fallback').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
