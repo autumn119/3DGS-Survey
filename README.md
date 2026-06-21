@@ -15,7 +15,7 @@ The project page is served via **GitHub Pages** at:
 | File | Description |
 |------|-------------|
 | `index.html` | Main project page (GitHub Pages) |
-| `assets/teaser.png` | Teaser figure (replace with yours) |
+| `assets/teaser.png` | Teaser figure (3DGS survey preview) |
 | `assets/gallery/` | Drum Tower dataset renderings |
 
 ## Companion Repository
