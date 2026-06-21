@@ -21,11 +21,3 @@ The project page is served via **GitHub Pages** at:
 ## Companion Repository
 
 &#128451; Benchmark code & data: [autumn119/3DGS-Survey-Taxonomy-Benchmark](https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark)
-
-## To Customize
-
-1. Replace `assets/teaser.png` with your paper's teaser figure
-2. Add Drum Tower renderings to `assets/gallery/`
-3. Update author names in `index.html`
-4. Update paper title and venue in `index.html`
-5. Add arXiv link when available
