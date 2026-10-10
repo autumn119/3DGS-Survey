@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3D Gaussian Splatting: A Comprehensive Taxonomy and Benchmark Survey</title>
-<meta name="description" content="Project page for the 3DGS survey paper — taxonomy, benchmark, and resources for 3D Gaussian Splatting research.">
+<title>UAV-Based Neural Reconstruction of Dong Drum Towers: A Multi-Case Benchmark for Conservation-Oriented Method Selection</title>
+<meta name="description" content="Project page for the Dong Drum Tower neural reconstruction benchmark — UAV and ground-level imagery, four methods (NeRF, 2DGS, 3DGS, Instant-NGP) plus an SfM-MVS baseline, evaluated for heritage conservation.">
 <style>
   :root {
     --bg: #ffffff;
@@ -39,7 +39,7 @@
     text-align: center;
   }
   .hero h1 {
-    font-size: 2.2rem;
+    font-size: 2.0rem;
     font-weight: 700;
     line-height: 1.35;
     margin-bottom: 20px;
@@ -178,21 +178,35 @@
     font-size: 1.3rem;
     flex-shrink: 0;
   }
-  .icon-taxonomy { background: #ede9fe; }
   .icon-benchmark { background: #fce7f3; }
+  .icon-geo { background: #ede9fe; }
   .icon-data { background: #dbeafe; }
   .icon-code { background: #d1fae5; }
   .contrib-list strong { display: block; margin-bottom: 2px; }
 
-  /* Taxonomy viz */
-  .taxonomy-tree {
+  /* Pipeline */
+  .pipeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .pipeline-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 32px 24px;
-    text-align: center;
+    border-radius: 10px;
+    padding: 18px 20px;
   }
-  .taxonomy-tree svg { max-width: 100%; height: auto; }
+  .pipeline-card .stage {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-light);
+    border-radius: 4px;
+    padding: 2px 10px;
+    margin-bottom: 8px;
+  }
+  .pipeline-card p { font-size: 0.9rem; color: var(--text-secondary); }
 
   /* Table */
   .table-wrap {
@@ -242,15 +256,7 @@
     overflow: hidden;
     background: var(--card-bg);
   }
-  .gallery-card .img-placeholder {
-    aspect-ratio: 16/10;
-    background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #94a3b8;
-    font-size: 0.9rem;
-  }
+  .gallery-card img { width: 100%; display: block; }
   .gallery-card .info {
     padding: 12px 16px;
     font-size: 0.88rem;
@@ -262,6 +268,11 @@
   .gallery-card .info .metric {
     color: var(--text-secondary);
     font-size: 0.82rem;
+  }
+  .gallery-2col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 16px;
   }
 
   /* Citation */
@@ -293,341 +304,255 @@
 
   /* Mobile */
   @media (max-width: 640px) {
-    .hero h1 { font-size: 1.5rem; }
+    .hero h1 { font-size: 1.4rem; }
     .hero { padding: 48px 16px 32px; }
     section { padding: 0 16px 40px; }
+    .gallery-2col { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
 <!-- ====== HERO ====== -->
-
 <div class="hero">
   <div class="venue">Submitted to IEEE TVCG / TVC</div>
-  <h1>3D Gaussian Splatting:<br>A Comprehensive Taxonomy and Benchmark Survey</h1>
+  <h1>UAV-Based Neural Reconstruction of Dong Drum Towers:<br>A Multi-Case Benchmark for Conservation-Oriented Method Selection</h1>
   <p class="authors">Jiaxing Tao</p>
   <p class="affiliations">Department of Computer Science and Technology, Kaili College, Guizhou, China</p>
   <div class="link-bar">
-    <a class="link-btn primary" href="[arXiv URL TBD]" target="_blank">&#128196; Paper (arXiv)</a>
-    <a class="link-btn" href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark" target="_blank">&#128451; Benchmark Repo</a>
-    <a class="link-btn" href="https://doi.org/10.5281/zenodo.20263999" target="_blank">&#128206; Zenodo DOI</a>
+    <a class="link-btn primary" href="https://github.com/autumn119/UAV-DDT-HeritageBench" target="_blank">&#128451; Code &amp; Benchmark</a>
+    <a class="link-btn" href="https://doi.org/10.5281/zenodo.21429615" target="_blank">&#128206; Dataset (Zenodo)</a>
     <a class="link-btn" href="#citation">&#128279; BibTeX</a>
   </div>
 </div>
 
 <!-- ====== TEASER ====== -->
-
 <section id="teaser">
   <h2>Overview</h2>
   <div class="teaser-container">
     <img src="assets/teaser.png" alt="Teaser figure" onerror="this.parentElement.style.display='none'">
     <div class="caption">
-      <strong>Figure 1:</strong> We present a comprehensive taxonomy of 3D Gaussian Splatting methods across three axes
-      &mdash; <em>Task Domain</em> (reconstruction, editing, generation, etc.),
-      <em>Module Focus</em> (representation, optimization, rendering), and
-      <em>Technical Approach</em> (anchoring, compression, anti-aliasing, etc.).
-      We also establish a unified benchmark protocol across 4 datasets and 6 metrics.
-    </div>
-  </div>
-  <div class="teaser-container" id="teaser-fallback" style="display:none;">
-    <div style="padding: 80px 40px; text-align:center; color:#94a3b8; font-size:1rem; line-height:1.8;">
-      &#128444;<br>
-      <strong>Teaser Figure</strong><br>
-      <em>Replace <code>assets/teaser.png</code> with your paper's teaser image</em><br>
-      <span style="font-size:0.85rem;">Recommended: 1920&times;1080 or 2:1 ratio, optimized PNG</span>
+      <strong>Figure 1:</strong> We benchmark four neural reconstruction methods (NeRF, 2DGS, 3DGS, Instant-NGP)
+      against a conventional SfM-MVS baseline on UAV imagery of four Dong minority drum towers
+      (&#26397;&#21033; Chaoli, &#20174;&#27743; Congjiang, &#21017;&#37324; Zeli, &#22686;&#20914; Zengchong),
+      evaluating novel-view rendering, geometric consistency, and dark-region wooden-structure preservation
+      for conservation-oriented method selection.
     </div>
   </div>
 </section>
 
 <!-- ====== ABSTRACT ====== -->
-
 <section id="abstract">
   <h2>Abstract</h2>
   <div class="abstract-box">
-    3D Gaussian Splatting (3DGS) has emerged as a transformative paradigm in novel view synthesis
-    and 3D scene representation, achieving real-time rendering speeds while matching or exceeding
-    the quality of neural radiance fields (NeRF). The rapid proliferation of 3DGS variants
-    &mdash; spanning dynamic scenes, 4D reconstruction, surface reconstruction, editing,
-    generation, and compression &mdash; has created an urgent need for a structured taxonomy
-    and unified evaluation. In this paper, we present a comprehensive survey that
-    <strong>(1)</strong> proposes a three-axis taxonomy (Task Domain &times; Module Focus &times; Technical Approach)
-    to categorize over 100 3DGS methods,
-    <strong>(2)</strong> establishes a reproducible benchmark protocol across 4 datasets (Blender, Mip-NeRF 360,
-    Tanks & Temples, and a custom Drum Tower cultural heritage dataset) with 6 standardized
-    metrics (PSNR, SSIM, LPIPS, FPS, VRAM, Training Time), and
-    <strong>(3)</strong> releases all code, configuration files, and results as an open-source repository
-    with a permanent Zenodo DOI for long-term archival.
-    Our benchmark reveals key trade-offs between quality, speed, and memory,
-    identifies under-explored areas such as large-scale outdoor scenes,
-    and provides actionable guidelines for future 3DGS research.
+    Dong drum towers are timber landmarks of the Dong minority in Guizhou, China, whose intricate
+    wooden frameworks &mdash; multi-tier eaves, imitation-dougong brackets, and chuandou frames &mdash; pose
+    severe challenges to 3D digitization: complex geometry, occluded dark regions under the eaves,
+    and variable outdoor lighting. This study establishes a multi-case benchmark that evaluates
+    four neural reconstruction methods (<strong>NeRF, 2DGS, 3DGS, and Instant-NGP</strong>) together with a
+    conventional <strong>SfM-MVS</strong> photogrammetric baseline on UAV and ground-level imagery of four drum towers.
+    Under a unified, fairness-controlled protocol (identical image sets, shared COLMAP poses, common
+    LLFF-style train/test splits, and a single RTX 4090 workstation), we evaluate
+    <strong>(1)</strong> novel-view rendering quality (PSNR / SSIM / LPIPS),
+    <strong>(2)</strong> training efficiency and rendering speed,
+    <strong>(3)</strong> geometric consistency with the SfM-MVS reference (Accuracy / Recall / F1 / NCD / P95 on
+    identically cropped tower-body point clouds), and
+    <strong>(4)</strong> dark-region preservation of wooden structures via ground-level upward-facing imagery.
+    3DGS achieves the best rendering fidelity (mean PSNR 31.81 dB, SSIM 0.9646, LPIPS 0.0227),
+    while INGP offers the fastest training; conventional MVS leaves systematic holes beneath the
+    eaves that 3DGS reconstructs completely. The results provide actionable, conservation-oriented
+    method-selection guidelines for heritage practitioners, and all code and data are released
+    with a permanent Zenodo DOI.
   </div>
 </section>
 
 <!-- ====== CONTRIBUTIONS ====== -->
-
 <section id="contributions">
   <h2>Key Contributions</h2>
   <ul class="contrib-list">
     <li>
-      <div class="icon icon-taxonomy">&#128202;</div>
+      <div class="icon icon-benchmark">&#128200;</div>
       <div>
-        <strong>Three-Axis Taxonomy</strong>
-        A structured classification of 100+ 3DGS methods along
-        Task Domain, Module Focus, and Technical Approach,
-        enabling systematic comparison and identifying research gaps.
+        <strong>Multi-Case Heritage Benchmark</strong>
+        A fairness-controlled benchmark of four neural reconstruction methods plus an SfM-MVS
+        baseline across four real Dong drum tower scenes, covering UAV aerial and ground-level
+        upward-facing capture.
       </div>
     </li>
     <li>
-      <div class="icon icon-benchmark">&#128200;</div>
+      <div class="icon icon-geo">&#128207;</div>
       <div>
-        <strong>Unified Benchmark Protocol</strong>
-        Reproducible evaluation across 4 datasets &times; 6 metrics,
-        with standardized hardware (NVIDIA RTX 4090), software versions,
-        and 5-run averaging for statistical reliability.
+        <strong>Beyond PSNR: Geometric &amp; Dark-Region Evaluation</strong>
+        Geometric consistency with the photogrammetric reference (Accuracy / Recall / F1 / NCD / P95
+        on uniformly cropped tower bodies), plus a dark-region coverage analysis revealing where
+        conventional MVS fails beneath the eaves.
       </div>
     </li>
     <li>
       <div class="icon icon-data">&#127963;</div>
       <div>
-        <strong>Cultural Heritage Dataset</strong>
-        A new Drum Tower dataset featuring Chinese Dong minority architecture
-        captured under challenging geometry and lighting conditions,
-        serving as a real-world testbed beyond synthetic benchmarks.
+        <strong>Dual-Viewpoint Heritage Dataset</strong>
+        UAV aerial corpus plus ground-level upward-facing imagery of wooden structures
+        (Congjiang: 423 train / 61 test; Zengchong: 782 train / 112 test), with COLMAP
+        reconstructions and train/test splits.
       </div>
     </li>
     <li>
       <div class="icon icon-code">&#128187;</div>
       <div>
         <strong>Open-Source Release</strong>
-        All taxonomy tables (CSV), benchmark configurations, evaluation scripts,
-        and results are publicly available with a permanent Zenodo DOI
-        (<code>10.5281/zenodo.20263999</code>) for long-term reproducibility.
+        All benchmark code, per-method training wrappers, evaluation scripts, and the dataset
+        are publicly available with a permanent Zenodo DOI
+        (<code>10.5281/zenodo.21429615</code>) for long-term reproducibility.
       </div>
     </li>
   </ul>
 </section>
 
-<!-- ====== TAXONOMY ====== -->
-
-<section id="taxonomy">
-  <h2>Taxonomy</h2>
+<!-- ====== BENCHMARK PROTOCOL ====== -->
+<section id="protocol">
+  <h2>Benchmark Protocol</h2>
   <p style="color:var(--text-secondary); margin-bottom: 16px;">
-    We classify 100+ 3DGS methods along three orthogonal axes:
-    <strong>Task Domain</strong> (what problem), <strong>Module Focus</strong> (which pipeline stage),
-    and <strong>Technical Approach</strong> (how it works).
+    Six pipeline stages with strict fairness control: identical image sets per scene, shared SfM
+    camera poses, common train/test splits (every 8th frame held out), and default/recommended
+    parameters per method on the same RTX 4090 workstation.
   </p>
-  <div class="taxonomy-tree">
-    <svg viewBox="0 0 920 620" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="gTask" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
-        <linearGradient id="gModule" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#db2777"/><stop offset="100%" stop-color="#f472b6"/></linearGradient>
-        <linearGradient id="gTech" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#60a5fa"/></linearGradient>
-        <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12"/></filter>
-      </defs>
-      <!-- Title -->
-      <text x="460" y="36" text-anchor="middle" font-size="18" font-weight="700" fill="#1a1a2e">3DGS Taxonomy: Three Orthogonal Axes</text>
-      <!-- Axis 1: Task Domain -->
-      <rect x="20" y="60" width="880" height="140" rx="12" fill="url(#gTask)" opacity="0.08"/>
-      <rect x="20" y="60" width="880" height="140" rx="12" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
-      <rect x="20" y="60" width="140" height="36" rx="8" fill="#7c3aed"/>
-      <text x="90" y="84" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Axis 1 — Task</text>
-      <text x="180" y="84" font-size="12" fill="#5b21b6" font-weight="500">Reconstruction</text>
-      <text x="300" y="84" font-size="12" fill="#5b21b6" font-weight="500">Dynamic / 4D</text>
-      <text x="410" y="84" font-size="12" fill="#5b21b6" font-weight="500">Editing</text>
-      <text x="490" y="84" font-size="12" fill="#5b21b6" font-weight="500">Generation</text>
-      <text x="590" y="84" font-size="12" fill="#5b21b6" font-weight="500">Compression</text>
-      <text x="710" y="84" font-size="12" fill="#5b21b6" font-weight="500">SLAM</text>
-      <text x="785" y="84" font-size="12" fill="#5b21b6" font-weight="500">Segmentation</text>
-      <!-- method chips row 1 -->
-      <rect x="180" y="100" width="96" height="22" rx="5" fill="#ede9fe"/>
-      <text x="228" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">3DGS, 2DGS</text>
-      <rect x="300" y="100" width="96" height="22" rx="5" fill="#ede9fe"/>
-      <text x="348" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">Deform 3DGS</text>
-      <rect x="410" y="100" width="65" height="22" rx="5" fill="#ede9fe"/>
-      <text x="443" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">GSEdit</text>
-      <rect x="590" y="100" width="96" height="22" rx="5" fill="#ede9fe"/>
-      <text x="638" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">Compact3D</text>
-      <rect x="710" y="100" width="60" height="22" rx="5" fill="#ede9fe"/>
-      <text x="740" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">GS-SLAM</text>
-      <!-- method chips row 2 -->
-      <rect x="180" y="130" width="96" height="22" rx="5" fill="#ede9fe"/>
-      <text x="228" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">Scaffold-GS</text>
-      <rect x="300" y="130" width="96" height="22" rx="5" fill="#ede9fe"/>
-      <text x="348" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">4DGS, STGS</text>
-      <rect x="410" y="130" width="65" height="22" rx="5" fill="#ede9fe"/>
-      <text x="443" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">GaussianPro</text>
-      <rect x="490" y="130" width="80" height="22" rx="5" fill="#ede9fe"/>
-      <text x="530" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">LGM, DreamG</text>
-      <rect x="590" y="130" width="96" height="22" rx="5" fill="#ede9fe"/>
-      <text x="638" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">LightGaussian</text>
-      <rect x="710" y="130" width="60" height="22" rx="5" fill="#ede9fe"/>
-      <text x="740" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">SplaTAM</text>
-      <rect x="785" y="130" width="90" height="22" rx="5" fill="#ede9fe"/>
-      <text x="830" y="145" text-anchor="middle" font-size="10" fill="#5b21b6">LangSplat</text>
-      <!-- method chips row 3 -->
-      <rect x="180" y="160" width="96" height="22" rx="5" fill="#ede9fe"/>
-      <text x="228" y="175" text-anchor="middle" font-size="10" fill="#5b21b6">Mip-Splatting</text>
-
-```
-  <!-- Axis 2: Module Focus -->
-  <rect x="20" y="220" width="880" height="120" rx="12" fill="url(#gModule)" opacity="0.08"/>
-  <rect x="20" y="220" width="880" height="120" rx="12" fill="none" stroke="#db2777" stroke-width="1.5"/>
-  <rect x="20" y="220" width="140" height="36" rx="8" fill="#db2777"/>
-  <text x="90" y="244" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Axis 2 — Module</text>
-  <text x="180" y="244" font-size="12" fill="#9d174d" font-weight="500">Representation</text>
-  <text x="310" y="244" font-size="12" fill="#9d174d" font-weight="500">Optimization</text>
-  <text x="430" y="244" font-size="12" fill="#9d174d" font-weight="500">Rendering</text>
-  <text x="530" y="244" font-size="12" fill="#9d174d" font-weight="500">Initialization</text>
-  <text x="645" y="244" font-size="12" fill="#9d174d" font-weight="500">Densification</text>
-  <text x="760" y="244" font-size="12" fill="#9d174d" font-weight="500">Training</text>
-  <!-- chips -->
-  <rect x="180" y="260" width="110" height="22" rx="5" fill="#fce7f3"/>
-  <text x="235" y="275" text-anchor="middle" font-size="10" fill="#9d174d">2D surfel, triplane</text>
-  <rect x="310" y="260" width="100" height="22" rx="5" fill="#fce7f3"/>
-  <text x="360" y="275" text-anchor="middle" font-size="10" fill="#9d174d">AbsGS, PixelGS</text>
-  <rect x="430" y="260" width="80" height="22" rx="5" fill="#fce7f3"/>
-  <text x="470" y="275" text-anchor="middle" font-size="10" fill="#9d174d">Mip-Splatting</text>
-  <rect x="530" y="260" width="95" height="22" rx="5" fill="#fce7f3"/>
-  <text x="578" y="275" text-anchor="middle" font-size="10" fill="#9d174d">GaussianPro</text>
-  <rect x="645" y="260" width="95" height="22" rx="5" fill="#fce7f3"/>
-  <text x="693" y="275" text-anchor="middle" font-size="10" fill="#9d174d">PixelGS, Revising</text>
-  <rect x="760" y="260" width="115" height="22" rx="5" fill="#fce7f3"/>
-  <text x="818" y="275" text-anchor="middle" font-size="10" fill="#9d174d">FreGS, Taming3DGS</text>
-  <!-- row 2 -->
-  <rect x="180" y="292" width="110" height="22" rx="5" fill="#fce7f3"/>
-  <text x="235" y="307" text-anchor="middle" font-size="10" fill="#9d174d">Octree, hash-grid</text>
-  <rect x="310" y="292" width="100" height="22" rx="5" fill="#fce7f3"/>
-  <text x="360" y="307" text-anchor="middle" font-size="10" fill="#9d174d">EfficientGS</text>
-  <rect x="430" y="292" width="80" height="22" rx="5" fill="#fce7f3"/>
-  <text x="470" y="307" text-anchor="middle" font-size="10" fill="#9d174d">TRBF, StopThePop</text>
-  <rect x="760" y="292" width="115" height="22" rx="5" fill="#fce7f3"/>
-  <text x="818" y="307" text-anchor="middle" font-size="10" fill="#9d174d">GaussianShader</text>
-
-  <!-- Axis 3: Technical Approach -->
-  <rect x="20" y="360" width="880" height="120" rx="12" fill="url(#gTech)" opacity="0.08"/>
-  <rect x="20" y="360" width="880" height="120" rx="12" fill="none" stroke="#2563eb" stroke-width="1.5"/>
-  <rect x="20" y="360" width="140" height="36" rx="8" fill="#2563eb"/>
-  <text x="90" y="384" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Axis 3 — Technique</text>
-  <text x="180" y="384" font-size="12" fill="#1e40af" font-weight="500">Anchoring</text>
-  <text x="280" y="384" font-size="12" fill="#1e40af" font-weight="500">Compression</text>
-  <text x="390" y="384" font-size="12" fill="#1e40af" font-weight="500">Anti-Aliasing</text>
-  <text x="505" y="384" font-size="12" fill="#1e40af" font-weight="500">Regularization</text>
-  <text x="625" y="384" font-size="12" fill="#1e40af" font-weight="500">Level-of-Detail</text>
-  <text x="750" y="384" font-size="12" fill="#1e40af" font-weight="500">Feature Augmentation</text>
-  <!-- chips -->
-  <rect x="180" y="400" width="80" height="22" rx="5" fill="#dbeafe"/>
-  <text x="220" y="415" text-anchor="middle" font-size="10" fill="#1e40af">Scaffold-GS</text>
-  <rect x="280" y="400" width="90" height="22" rx="5" fill="#dbeafe"/>
-  <text x="325" y="415" text-anchor="middle" font-size="10" fill="#1e40af">LightGaussian</text>
-  <rect x="390" y="400" width="95" height="22" rx="5" fill="#dbeafe"/>
-  <text x="438" y="415" text-anchor="middle" font-size="10" fill="#1e40af">Mip-Splatting</text>
-  <rect x="505" y="400" width="100" height="22" rx="5" fill="#dbeafe"/>
-  <text x="555" y="415" text-anchor="middle" font-size="10" fill="#1e40af">PhysGaussian</text>
-  <rect x="625" y="400" width="105" height="22" rx="5" fill="#dbeafe"/>
-  <text x="678" y="415" text-anchor="middle" font-size="10" fill="#1e40af">CityGaussian</text>
-  <rect x="750" y="400" width="125" height="22" rx="5" fill="#dbeafe"/>
-  <text x="813" y="415" text-anchor="middle" font-size="10" fill="#1e40af">GaussianShader</text>
-  <!-- row 2 -->
-  <rect x="180" y="432" width="80" height="22" rx="5" fill="#dbeafe"/>
-  <text x="220" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Octree-GS</text>
-  <rect x="280" y="432" width="90" height="22" rx="5" fill="#dbeafe"/>
-  <text x="325" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Compact3D</text>
-  <rect x="390" y="432" width="95" height="22" rx="5" fill="#dbeafe"/>
-  <text x="438" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Analytic-Splatting</text>
-  <rect x="505" y="432" width="100" height="22" rx="5" fill="#dbeafe"/>
-  <text x="555" y="447" text-anchor="middle" font-size="10" fill="#1e40af">AbsGS, PixelGS</text>
-  <rect x="625" y="432" width="105" height="22" rx="5" fill="#dbeafe"/>
-  <text x="678" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Hierarchical-GS</text>
-  <rect x="750" y="432" width="125" height="22" rx="5" fill="#dbeafe"/>
-  <text x="813" y="447" text-anchor="middle" font-size="10" fill="#1e40af">Feature3DGS</text>
-
-  <!-- Legend -->
-  <text x="460" y="520" text-anchor="middle" font-size="11" fill="#888">47 representative methods shown&emsp;|&emsp;Full table: <tspan fill="#2563eb">taxonomy/3dgs_taxonomy.csv</tspan></text>
-  <text x="460" y="545" text-anchor="middle" font-size="11" fill="#888">Companion repository: <tspan fill="#2563eb">github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark</tspan></text>
-  <!-- connecting lines from title -->
-  <line x1="460" y1="44" x2="460" y2="54" stroke="#cbd5e1" stroke-width="1"/>
-  <line x1="90" y1="54" x2="830" y2="54" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,3"/>
-  <line x1="90" y1="54" x2="90" y2="60" stroke="#7c3aed" stroke-width="1.5"/>
-  <line x1="460" y1="54" x2="460" y2="220" stroke="#db2777" stroke-width="1.5" stroke-dasharray="4,3"/>
-  <line x1="90" y1="200" x2="90" y2="220" stroke="#db2777" stroke-width="1.5"/>
-  <line x1="90" y1="340" x2="90" y2="360" stroke="#2563eb" stroke-width="1.5"/>
-</svg>
-```
-
+  <div class="pipeline-grid">
+    <div class="pipeline-card">
+      <span class="stage">Stage 1&ndash;2</span>
+      <strong>UAV Acquisition &amp; Corpus Construction</strong>
+      <p>Drone flights around four drum towers (544&ndash;654 images per scene) plus ground-level
+      upward-facing capture for dark wooden structures.</p>
+    </div>
+    <div class="pipeline-card">
+      <span class="stage">Stage 3</span>
+      <strong>Camera Poses (COLMAP)</strong>
+      <p>SfM pose estimation and sparse reconstruction with COLMAP 3.14 (CUDA); 2DGS and 3DGS
+      share the same COLMAP workspace.</p>
+    </div>
+    <div class="pipeline-card">
+      <span class="stage">Stage 4</span>
+      <strong>Neural Reconstruction</strong>
+      <p>Four methods trained per scene: NeRF (blender, factor 8), 2DGS (30k, sh=3),
+      3DGS (30k), and Instant-NGP (50k steps, hash encoding).</p>
+    </div>
+    <div class="pipeline-card">
+      <span class="stage">Stage 5</span>
+      <strong>Multi-Dimensional Evaluation</strong>
+      <p>Held-out rendering (PSNR/SSIM/LPIPS), training time, FPS, geometric consistency
+      (Acc/Recall/F1/NCD/P95 vs. MVS), dark-region coverage analysis.</p>
+    </div>
+    <div class="pipeline-card">
+      <span class="stage">Stage 6</span>
+      <strong>Conservation-Oriented Interpretation</strong>
+      <p>Method-selection guidelines translating quantitative findings into recommendations
+      for heritage digitization practitioners.</p>
+    </div>
   </div>
 </section>
 
-<!-- ====== BENCHMARK ====== -->
-
+<!-- ====== BENCHMARK RESULTS ====== -->
 <section id="benchmark">
   <h2>Benchmark Results</h2>
   <p style="color:var(--text-secondary); margin-bottom: 16px;">
-    Selected results on <strong>Mip-NeRF 360</strong> (outdoor scenes). Full results across all 4 datasets
-    are available in the <a href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark">benchmark repository</a>.
-    <span class="tag">Best</span> and <span class="tag">2nd</span> values highlighted.
+    Held-out-view rendering performance, averaged over the four drum tower scenes.
+    The SfM-MVS baseline is rendered by ray-casting its Poisson mesh at the test poses.
+    Full per-scene results are available in the
+    <a href="https://github.com/autumn119/UAV-DDT-HeritageBench">benchmark repository</a>.
+    <span class="tag">Best</span> values highlighted.
   </p>
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
           <th>Method</th>
-          <th>Bicycle</th>
-          <th>Garden</th>
-          <th>Stump</th>
-          <th>Bonsai</th>
-          <th>Counter</th>
-          <th>Kitchen</th>
-          <th>Room</th>
-          <th>Avg PSNR&uarr;</th>
+          <th>PSNR &uarr;</th>
+          <th>SSIM &uarr;</th>
+          <th>LPIPS &darr;</th>
+          <th>Notes</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>3DGS</strong> (Kerbl 2023)</td>
-          <td>25.25</td><td>27.41</td><td>26.55</td><td>31.98</td>
-          <td>28.70</td><td>30.32</td><td>30.63</td>
-          <td>28.69</td>
+          <td>SfM-MVS (baseline)</td>
+          <td>13.65</td><td>0.3548</td><td>0.4943</td>
+          <td>Poisson mesh + per-vertex colour</td>
         </tr>
         <tr>
-          <td><strong>2DGS</strong> (Huang 2024)</td>
-          <td>24.77</td><td>26.69</td><td>26.08</td><td>31.45</td>
-          <td>28.21</td><td>30.02</td><td>30.28</td>
-          <td>28.21</td>
+          <td>NeRF</td>
+          <td>19.30</td><td>0.4130</td><td>0.5203</td>
+          <td>Slow convergence, residual haze</td>
         </tr>
         <tr>
-          <td><strong>Mip-Splatting</strong> (Yu 2024)</td>
-          <td class="best">25.79</td><td class="best">27.85</td><td class="best">26.92</td>
-          <td class="best">32.48</td><td>28.80</td><td class="best">31.15</td><td class="best">31.21</td>
-          <td class="best">29.17</td>
-        </tr>
-        <tr>
-          <td><strong>Scaffold-GS</strong> (Lu 2024)</td>
-          <td class="second">25.55</td><td class="second">27.73</td><td class="second">26.74</td>
-          <td class="second">32.31</td><td class="best">29.08</td><td class="second">30.87</td><td class="second">31.09</td>
-          <td class="second">29.05</td>
+          <td>2DGS</td>
+          <td>29.28</td><td>0.9452</td><td>0.0364</td>
+          <td>Best geometric consistency (NCD)</td>
         </tr>
         <tr class="ours">
-          <td><strong>3DGS</strong> (Ours, RTX 4090)</td>
-          <td colspan="7" style="text-align:center; color:#888; font-style:italic;">
-            Drum Tower &mdash; Zeli: 31.94 dB &ensp;|&ensp; Chao Li: 33.53 dB &ensp;
-            <a href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark" style="font-style:normal;">[see full results]</a>
-          </td>
+          <td><strong>3DGS</strong></td>
+          <td class="best">31.81</td><td class="best">0.9646</td><td class="best">0.0227</td>
+          <td>Best rendering fidelity; preserves dark wooden structures</td>
+        </tr>
+        <tr>
+          <td>Instant-NGP</td>
+          <td>27.92</td><td>0.9018</td><td>0.0828</td>
+          <td>Fastest training; highest geometric recall</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p style="font-size:0.8rem; color:#888; margin-top:8px;">
-    * Data sourced from original papers. Our own experiments run on a single NVIDIA RTX 4090 (24 GB).
+    * All methods evaluated on identical held-out test views; LPIPS uses AlexNet.
+    Means over the four scenes (Chaoli, Congjiang, Zeli, Zengchong).
   </p>
 </section>
 
-<!-- ====== DRUM TOWER ====== -->
+<!-- ====== GROUND-LEVEL COMPARISON ====== -->
+<section id="ground-level">
+  <h2>Ground-Level View Reconstruction</h2>
+  <p style="color:var(--text-secondary); margin-bottom: 16px;">
+    Ground-level (upward-facing) images reconstruct the parts that UAV capture cannot see:
+    the undersides of multi-tier eaves, imitation-dougong brackets, and chuandou frames.
+    Each composite compares the four methods against the ground-truth photograph
+    (two view groups per scene: full view + zoomed crop of wooden details).
+  </p>
+  <div class="gallery-2col">
+    <div class="gallery-card">
+      <img src="assets/ground_view_chaoli.jpg" alt="Chaoli ground-level comparison" onerror="this.parentElement.style.display='none'">
+      <div class="info">
+        <div class="label">Chaoli &#26397;&#21033;</div>
+        <div class="metric">GT / 2DGS / INGP / NeRF / 3DGS</div>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <img src="assets/ground_view_congjiang.jpg" alt="Congjiang ground-level comparison" onerror="this.parentElement.style.display='none'">
+      <div class="info">
+        <div class="label">Congjiang &#20174;&#27743;</div>
+        <div class="metric">GT / 2DGS / INGP / NeRF / 3DGS</div>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <img src="assets/ground_view_zeli.jpg" alt="Zeli ground-level comparison" onerror="this.parentElement.style.display='none'">
+      <div class="info">
+        <div class="label">Zeli &#21017;&#37324;</div>
+        <div class="metric">GT / 2DGS / INGP / NeRF / 3DGS</div>
+      </div>
+    </div>
+    <div class="gallery-card">
+      <img src="assets/ground_view_zengchong.jpg" alt="Zengchong ground-level comparison" onerror="this.parentElement.style.display='none'">
+      <div class="info">
+        <div class="label">Zengchong &#22686;&#20914;</div>
+        <div class="metric">GT / 2DGS / INGP / NeRF / 3DGS</div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ====== DRUM TOWER ====== -->
 <section id="dataset">
   <h2>Drum Tower Dataset — Rendering Results</h2>
   <p style="color:var(--text-secondary); margin-bottom: 16px;">
-    A new real-world benchmark featuring Chinese Dong minority drum tower architecture &mdash;
+    A real-world benchmark featuring Chinese Dong minority drum tower architecture &mdash;
     challenging geometry with intricate wooden structures, variable outdoor lighting,
     and multi-scale details. Below are representative rendering results from our benchmark.
   </p>
@@ -676,30 +601,22 @@
     </div>
   </div>
   <p style="font-size:0.88rem; color:var(--text-secondary); margin-top:16px; text-align:center;">
-    &#128161; Showing 6 of 63 total rendering images.
-    <a href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark/tree/main/results/drum_tower" target="_blank">View all results on GitHub</a>.
-  </p>
-  <p style="font-size:0.8rem; color:#888; margin-top:12px;">
-    * Dataset will be released upon paper acceptance. For access requests, please contact the corresponding author.
+    &#128161; Showing 6 of 63 total rendering images &mdash; see the
+    <a href="https://github.com/autumn119/UAV-DDT-HeritageBench" target="_blank">benchmark repository</a> for full results and videos.
   </p>
 </section>
 
 <!-- ====== RESOURCES ====== -->
-
 <section id="resources">
   <h2>Resources &amp; Links</h2>
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
-    <a href="[arXiv URL TBD]" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
-      <strong>&#128196; Paper (arXiv)</strong><br>
-      <span style="color:var(--text-secondary); font-size:0.88rem;">Full paper PDF on arXiv</span>
+    <a href="https://github.com/autumn119/UAV-DDT-HeritageBench" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
+      <strong>&#128451; Code &amp; Benchmark Repository</strong><br>
+      <span style="color:var(--text-secondary); font-size:0.88rem;">Manuscript, training wrappers, evaluation scripts</span>
     </a>
-    <a href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
-      <strong>&#128451; Benchmark Repository</strong><br>
-      <span style="color:var(--text-secondary); font-size:0.88rem;">Code, taxonomy CSV, benchmark config</span>
-    </a>
-    <a href="https://doi.org/10.5281/zenodo.20263999" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
-      <strong>&#128206; Zenodo Archive</strong><br>
-      <span style="color:var(--text-secondary); font-size:0.88rem;">Permanent DOI: 10.5281/zenodo.20263999</span>
+    <a href="https://doi.org/10.5281/zenodo.21429615" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
+      <strong>&#128206; Dataset (Zenodo)</strong><br>
+      <span style="color:var(--text-secondary); font-size:0.88rem;">UAV imagery &amp; COLMAP reconstructions &middot; DOI: 10.5281/zenodo.21429615</span>
     </a>
     <a href="https://github.com/autumn119/3DGS-Survey" target="_blank" style="display:block; padding:20px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; color:var(--text);">
       <strong>&#127760; Project Page</strong><br>
@@ -709,37 +626,25 @@
 </section>
 
 <!-- ====== CITATION ====== -->
-
 <section id="citation">
   <h2>Citation</h2>
   <p style="color:var(--text-secondary); margin-bottom: 12px;">
     If you find this work useful, please cite:
   </p>
-  <div class="cite-block"><span class="comment">@article{</span><span class="kw">3dgs-survey-2026</span>,
-  <span class="kw">title</span>   = <span class="str">{3D Gaussian Splatting: A Comprehensive Taxonomy and Benchmark Survey}</span>,
+  <div class="cite-block"><span class="comment">@article{</span><span class="kw">tao2026_dong_drum_tower</span>,
+  <span class="kw">title</span>   = <span class="str">{UAV-Based Neural Reconstruction of Dong Drum Towers: A Multi-Case Benchmark for Conservation-Oriented Method Selection}</span>,
   <span class="kw">author</span>  = <span class="str">{Tao, Jiaxing}</span>,
-  <span class="kw">journal</span> = <span class="str">{[Journal/Conference Name]}</span>,
-  <span class="kw">year</span>    = <span class="str">{2026}</span>,
-  <span class="kw">doi</span>     = <span class="str">{10.5281/zenodo.20263999}</span>,
+  <span class="kw">journal</span> = <span class="str">{IEEE Transactions on Visualization and Computer Graphics}</span>,
+  <span class="kw">year</span>    = <span class="str">{2026}</span>
 <span class="comment">}</span></div>
 </section>
 
 <!-- ====== FOOTER ====== -->
-
 <footer>
   <p>&copy; 2026. This project page is maintained alongside the
-  <a href="https://github.com/autumn119/3DGS-Survey-Taxonomy-Benchmark">benchmark repository</a>.</p>
-  <p style="margin-top:8px;">Built with &#10084; for the 3D vision community.</p>
+  <a href="https://github.com/autumn119/UAV-DDT-HeritageBench">benchmark repository</a>.</p>
+  <p style="margin-top:8px;">Built with &#10084; for heritage conservation.</p>
 </footer>
-
-<script>
-  // Show fallback if teaser image not found
-  var img = document.querySelector('.teaser-container img');
-  if (img && img.naturalWidth === 0) {
-    img.parentElement.style.display = 'none';
-    document.getElementById('teaser-fallback').style.display = 'block';
-  }
-</script>
 
 </body>
 </html>
