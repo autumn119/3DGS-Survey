@@ -352,13 +352,13 @@
     four neural reconstruction methods (<strong>NeRF, 2DGS, 3DGS, and Instant-NGP</strong>) together with a
     conventional <strong>SfM-MVS</strong> photogrammetric baseline on UAV and ground-level imagery of four drum towers.
     Under a unified, fairness-controlled protocol (identical image sets, shared COLMAP poses, common
-    LLFF-style train/test splits, and a single RTX 4090 workstation), we evaluate
+    LLFF-style train/test splits, and a single RTX 4090 D workstation), we evaluate
     <strong>(1)</strong> novel-view rendering quality (PSNR / SSIM / LPIPS),
     <strong>(2)</strong> training efficiency and rendering speed,
     <strong>(3)</strong> geometric consistency with the SfM-MVS reference (Accuracy / Recall / F1 / NCD / P95 on
     identically cropped tower-body point clouds), and
     <strong>(4)</strong> dark-region preservation of wooden structures via ground-level upward-facing imagery.
-    3DGS achieves the best rendering fidelity (mean PSNR 31.81 dB, SSIM 0.9646, LPIPS 0.0227),
+    3DGS achieves the best rendering fidelity (mean PSNR 31.79 dB, SSIM 0.965, LPIPS 0.023) on the UAV corpus and 23.44 dB / 0.816 / 0.223 on the ground-level corpus,
     while INGP offers the fastest training; conventional MVS leaves systematic holes beneath the
     eaves that 3DGS reconstructs completely. The results provide actionable, conservation-oriented
     method-selection guidelines for heritage practitioners, and all code and data are released
@@ -455,7 +455,7 @@
 <section id="benchmark">
   <h2>Benchmark Results</h2>
   <p style="color:var(--text-secondary); margin-bottom: 16px;">
-    Held-out-view rendering performance, averaged over the four drum tower scenes.
+    Held-out-view rendering performance on the UAV aerial corpus, averaged over the four drum tower scenes.
     The SfM-MVS baseline is rendered by ray-casting its Poisson mesh at the test poses.
     Full per-scene results are available in the
     <a href="https://github.com/autumn119/UAV-DDT-HeritageBench">benchmark repository</a>.
@@ -480,29 +480,29 @@
         </tr>
         <tr>
           <td>NeRF</td>
-          <td>19.30</td><td>0.4130</td><td>0.5203</td>
+          <td>19.57</td><td>0.444</td><td>0.548</td>
           <td>Slow convergence, residual haze</td>
         </tr>
         <tr>
           <td>2DGS</td>
-          <td>29.28</td><td>0.9452</td><td>0.0364</td>
+          <td>29.31</td><td>0.945</td><td>0.037</td>
           <td>Best geometric consistency (NCD)</td>
         </tr>
         <tr class="ours">
           <td><strong>3DGS</strong></td>
-          <td class="best">31.81</td><td class="best">0.9646</td><td class="best">0.0227</td>
+          <td class="best">31.79</td><td class="best">0.965</td><td class="best">0.023</td>
           <td>Best rendering fidelity; preserves dark wooden structures</td>
         </tr>
         <tr>
           <td>Instant-NGP</td>
-          <td>27.92</td><td>0.9018</td><td>0.0828</td>
+          <td>27.81</td><td>0.901</td><td>0.080</td>
           <td>Fastest training; highest geometric recall</td>
         </tr>
       </tbody>
     </table>
   </div>
   <p style="font-size:0.8rem; color:#888; margin-top:8px;">
-    * All methods evaluated on identical held-out test views; LPIPS uses AlexNet.
+    * All methods evaluated on identical held-out test views; LPIPS uses AlexNet. The same ranking (3DGS &gt; 2DGS &gt; INGP &gt; NeRF) holds on the independent ground-level handheld-video corpus, where 3DGS averages 23.44 dB / 0.816 / 0.223 &mdash; lower in absolute value because ground-level frames are 540&times;960 portrait views captured from a narrow upward-looking baseline.
     Means over the four scenes (Chaoli, Congjiang, Zeli, Zengchong).
   </p>
 </section>
